@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Test - Храм Души</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }
+        .debug-info { background: white; padding: 20px; margin: 10px 0; border-radius: 8px; }
+        .test-button { background: #667eea; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 5px; }
+        .test-button:hover { background: #5a6fd8; }
+        .result { background: #e8f5e8; padding: 10px; margin: 10px 0; border-left: 4px solid #4caf50; }
+        .error { background: #ffe8e8; padding: 10px; margin: 10px 0; border-left: 4px solid #f44336; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug Test - Храм Души Game</h1>
+    
+    <div class="debug-info">
+        <h2>Game Data Test</h2>
+        <button class="test-button" onclick="testGameData()">Test Game Data</button>
+        <div id="gameDataResult"></div>
+    </div>
+    
+    <div class="debug-info">
+        <h2>Background Test</h2>
+        <button class="test-button" onclick="testBackgrounds()">Test Backgrounds</button>
+        <div id="backgroundResult"></div>
+    </div>
+    
+    <div class="debug-info">
+        <h2>Element Test</h2>
+        <button class="test-button" onclick="testElements()">Test Elements</button>
+        <div id="elementResult"></div>
+    </div>
+    
+    <div class="debug-info">
+        <h2>Full Game Test</h2>
+        <button class="test-button" onclick="testFullGame()">Test Full Game</button>
+        <div id="fullGameResult"></div>
+    </div>
+
+    <script>
+        // Copy the game data from the main game
+        const gameData = [
+            {
+                id: 'scene_01',
+                title: 'Природное Место',
+                steps: [
+                    {
+                        id: 'scene_01_step_1',
+                        title: 'Природное Место',
+                        background: 'linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%)',
+                        narrator: 'Вы оказываетесь в каком-то очень комфортном, безопасном и приятном для вас природном месте.'
+                    }
+                ]
+            }
+        ];
+
+        function testGameData() {
+            const result = document.getElementById('gameDataResult');
+            try {
+                result.innerHTML = `
+                    <div class="result">
+                        ✅ Game data loaded successfully<br>
+                        Scenes: ${gameData.length}<br>
+                        First scene: ${gameData[0].title}<br>
+                        First step background: ${gameData[0].steps[0].background}
+                    </div>
+                `;
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        function testBackgrounds() {
+            const result = document.getElementById('backgroundResult');
+            const testDiv = document.createElement('div');
+            testDiv.style.width = '200px';
+            testDiv.style.height = '100px';
+            testDiv.style.border = '2px solid #000';
+            testDiv.style.margin = '10px 0';
+            
+            const gradient = 'linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%)';
+            testDiv.style.background = gradient;
+            
+            result.innerHTML = `
+                <div class="result">
+                    ✅ Background test successful<br>
+                    Gradient: ${gradient}
+                </div>
+            `;
+            result.appendChild(testDiv);
+        }
+
+        function testElements() {
+            const result = document.getElementById('elementResult');
+            try {
+                // Test if we can create elements like in the main game
+                const testDiv = document.createElement('div');
+                testDiv.id = 'testBackgroundImage';
+                testDiv.style.width = '300px';
+                testDiv.style.height = '150px';
+                testDiv.style.background = 'linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%)';
+                testDiv.style.border = '2px solid #000';
+                testDiv.style.margin = '10px 0';
+                
+                result.innerHTML = `
+                    <div class="result">
+                        ✅ Element creation successful<br>
+                        Background applied to test element
+                    </div>
+                `;
+                result.appendChild(testDiv);
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        function testFullGame() {
+            const result = document.getElementById('fullGameResult');
+            try {
+                // Simulate the main game logic
+                let currentSceneIndex = 0;
+                let currentStepIndex = 0;
+                
+                function getCurrentStep() {
+                    const currentScene = gameData[currentSceneIndex];
+                    return currentScene?.steps[currentStepIndex];
+                }
+                
+                function updateDisplay() {
+                    const currentStep = getCurrentStep();
+                    if (!currentStep) return;
+                    
+                    console.log('Setting background to:', currentStep.background);
+                    
+                    const testDiv = document.createElement('div');
+                    testDiv.style.width = '400px';
+                    testDiv.style.height = '200px';
+                    testDiv.style.background = currentStep.background;
+                    testDiv.style.border = '2px solid #000';
+                    testDiv.style.margin = '10px 0';
+                    testDiv.style.position = 'relative';
+                    
+                    const title = document.createElement('div');
+                    title.textContent = currentStep.title;
+                    title.style.position = 'absolute';
+                    title.style.top = '10px';
+                    title.style.left = '10px';
+                    title.style.color = 'white';
+                    title.style.fontWeight = 'bold';
+                    title.style.textShadow = '2px 2px 4px rgba(0,0,0,0.8)';
+                    
+                    const narrator = document.createElement('div');
+                    narrator.textContent = currentStep.narrator;
+                    narrator.style.position = 'absolute';
+                    narrator.style.bottom = '10px';
+                    narrator.style.left = '10px';
+                    narrator.style.right = '10px';
+                    narrator.style.color = 'white';
+                    narrator.style.background = 'rgba(0,0,0,0.6)';
+                    narrator.style.padding = '10px';
+                    narrator.style.borderRadius = '5px';
+                    
+                    testDiv.appendChild(title);
+                    testDiv.appendChild(narrator);
+                    
+                    result.innerHTML = `
+                        <div class="result">
+                            ✅ Full game simulation successful<br>
+                            Scene: ${currentStep.title}<br>
+                            Background: ${currentStep.background}<br>
+                            Narrator: ${currentStep.narrator}
+                        </div>
+                    `;
+                    result.appendChild(testDiv);
+                }
+                
+                updateDisplay();
+                
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // Auto-run tests on page load
+        window.onload = function() {
+            testGameData();
+            testBackgrounds();
+            testElements();
+            testFullGame();
+        };
+    </script>
+</body>
+</html>
