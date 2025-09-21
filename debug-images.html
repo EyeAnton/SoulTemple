@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Debug Test</title>
+</head>
+<body>
+    <h1>Testing Images</h1>
+    
+    <h2>Scene 01 A</h2>
+    <img src="/public/images/scene_01_a.png" alt="Scene 01 A" style="max-width: 300px;">
+    <p>Path: /public/images/scene_01_a.png</p>
+    
+    <h2>Scene 01 B</h2>
+    <img src="/public/images/scene_01_b.png" alt="Scene 01 B" style="max-width: 300px;">
+    <p>Path: /public/images/scene_01_b.png</p>
+    
+    <h2>Character 01 A</h2>
+    <img src="/public/images/character_01_a.png" alt="Character 01 A" style="max-width: 300px;">
+    <p>Path: /public/images/character_01_a.png</p>
+    
+    <script>
+        // Test image loading
+        const images = [
+            '/public/images/scene_01_a.png',
+            '/public/images/scene_01_b.png',
+            '/public/images/character_01_a.png'
+        ];
+        
+        images.forEach(src => {
+            const img = new Image();
+            img.onload = () => console.log(`✅ ${src} loaded successfully`);
+            img.onerror = () => console.log(`❌ ${src} failed to load`);
+            img.src = src;
+        });
+    </script>
+</body>
+</html>
