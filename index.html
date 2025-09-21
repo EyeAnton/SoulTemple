@@ -556,7 +556,10 @@
             if (!currentStep) return;
 
             // Update background
+            console.log('Setting background to:', currentStep.background);
             backgroundImage.style.background = currentStep.background;
+            backgroundImage.style.backgroundSize = 'cover';
+            backgroundImage.style.backgroundPosition = 'center';
             
             // Update title
             sceneTitle.textContent = currentStep.title;
@@ -681,6 +684,8 @@
         }
 
         function startGame() {
+            currentSceneIndex = 0;
+            currentStepIndex = 0;
             updateDisplay();
         }
 
