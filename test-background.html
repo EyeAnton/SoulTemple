@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Background Image Test</title>
+    <style>
+        .test-bg {
+            width: 800px;
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 2px solid #000;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Background Image Test</h1>
+    
+    <h2>Scene 03 A (Healing Scene)</h2>
+    <div class="test-bg" style="background-image: url('/scene_03_a.png');">
+        <p style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); padding: 20px;">
+            This should show the healing temple scene
+        </p>
+    </div>
+    
+    <h2>Scene 01 A (Nature Scene)</h2>
+    <div class="test-bg" style="background-image: url('/scene_01_a.png');">
+        <p style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); padding: 20px;">
+            This should show the nature scene
+        </p>
+    </div>
+    
+    <h2>Direct Image Test</h2>
+    <img src="/scene_03_a.png" alt="Scene 03 A" style="max-width: 400px; border: 2px solid #000;">
+    
+    <script>
+        // Test if images load
+        const testImages = ['/scene_03_a.png', '/scene_01_a.png'];
+        testImages.forEach(src => {
+            const img = new Image();
+            img.onload = () => console.log(`✅ Background ${src} loaded successfully`);
+            img.onerror = () => console.log(`❌ Background ${src} failed to load`);
+            img.src = src;
+        });
+    </script>
+</body>
+</html>
