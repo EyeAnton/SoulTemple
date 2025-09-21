@@ -577,7 +577,7 @@
             if (!currentStep) return;
 
             // Update background
-            backgroundImage.style.backgroundImage = `url(${currentStep.background})`;
+            backgroundImage.innerHTML = `<img src="${currentStep.background}" alt="Background" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1;">`;
             
             // Update title
             sceneTitle.textContent = currentStep.title;
