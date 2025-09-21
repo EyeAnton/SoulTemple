@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Храм Души - Духовное путешествие" />
+    <title>Храм Души</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            padding: 20px;
+        }
+        
+        .game-content {
+            width: 800px;
+            max-width: 100%;
+            height: 100vh;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .background-image {
+            width: 100%;
+            height: calc(100vh - 200px);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            background-color: #f8f9fa;
+        }
+        
+        .scene-title {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: #fff;
+            letter-spacing: 2px;
+            margin: 0;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+            z-index: 4;
+            animation: fadeInDown 0.8s ease-out;
+        }
+        
+        .narrator-section {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0 40px 20px 40px;
+            background: transparent;
+        }
+        
+        .narrator-paragraph {
+            font-size: 1rem;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            font-style: italic;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 12px 16px;
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 80%;
+            margin: 0 auto;
+            word-wrap: break-word;
+        }
+        
+        .character-container {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .character-image {
+            max-width: 360px;
+            max-height: 450px;
+            border-radius: 10px;
+            animation: float 3s ease-in-out infinite;
+            opacity: 0.9;
+        }
+        
+        .scene-content {
+            padding: 0;
+            background: #fff;
+            text-align: center;
+            animation: slideInUp 0.8s ease-out;
+            color: #333;
+            width: 100%;
+            flex-shrink: 0;
+        }
+        
+        .choice-container {
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 15px;
+            border: 1px solid #e9ecef;
+            width: 100%;
+            margin: 0;
+        }
+        
+        .choice-question {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .choice-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .choice-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+        }
+        
+        .choice-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .next-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 30px 0 15px 0;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .completion-screen {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            margin: 20px;
+        }
+        
+        .completion-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        
+        .completion-text {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .choices-summary {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .choice-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+        
+        .restart-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .restart-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0px);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .game-content {
+                width: 95%;
+                height: 100vh;
+            }
+            
+            .background-image {
+                height: calc(100vh - 150px);
+            }
+            
+            .scene-title {
+                font-size: 1.5rem;
+            }
+            
+            .narrator-paragraph {
+                font-size: 0.9rem;
+                padding: 10px 12px;
+            }
+            
+            .character-image {
+                max-width: 300px;
+                max-height: 360px;
+            }
+            
+            .choice-container {
+                padding: 20px;
+            }
+            
+            .choice-button {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .game-content {
+                width: 100%;
+                height: 100vh;
+                border-radius: 0;
+            }
+            
+            .background-image {
+                height: calc(100vh - 120px);
+            }
+            
+            .scene-title {
+                font-size: 1.3rem;
+            }
+            
+            .narrator-paragraph {
+                font-size: 0.8rem;
+                padding: 8px 10px;
+            }
+            
+            .character-image {
+                max-width: 240px;
+                max-height: 300px;
+            }
+            
+            .choice-container {
+                padding: 15px;
+            }
+            
+            .choice-button {
+                padding: 10px 12px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-content">
+            <div class="background-image" id="backgroundImage">
+                <h1 class="scene-title" id="sceneTitle">Храм Души</h1>
+                <div class="narrator-section">
+                    <p class="narrator-paragraph" id="narratorText">Добро пожаловать в Храм Души</p>
+                </div>
+                <div class="character-container" id="characterContainer" style="display: none;">
+                    <img class="character-image" id="characterImage" alt="Character">
+                </div>
+            </div>
+            <div class="scene-content" id="sceneContent">
+                <div class="choice-container">
+                    <div class="choice-question" id="choiceQuestion">Готовы начать ваше духовное путешествие?</div>
+                    <div class="choice-buttons" id="choiceButtons">
+                        <button class="choice-button" onclick="startGame()">Начать путешествие</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load image data from the JSON file
+        let imageData = {};
+        
+        // Try to load the base64 images
+        fetch('./images-base64.json')
+            .then(response => response.json())
+            .then(data => {
+                imageData = data;
+                console.log('✅ Images loaded successfully');
+                console.log('Available images:', Object.keys(imageData));
+            })
+            .catch(error => {
+                console.log('❌ Error loading images:', error);
+                // Fallback to direct image paths
+                imageData = {
+                    'scene_01_a.png': './scene_01_a.png',
+                    'scene_01_b.png': './scene_01_b.png',
+                    'scene_02_a.png': './scene_02_a.png',
+                    'scene_02_b.png': './scene_02_b.png',
+                    'scene_03_a.png': './scene_03_a.png',
+                    'scene_04_a.png': './scene_04_a.png',
+                    'scene_05_a.png': './scene_05_a.png',
+                    'character_01_a.png': './character_01_a.png',
+                    'character_02_a.png': './character_02_a.png'
+                };
+            });
+
+        // Game data with actual image references
+        const gameData = [
+            {
+                id: 'scene_01',
+                title: 'Природное Место',
+                steps: [
+                    {
+                        id: 'scene_01_step_1',
+                        title: 'Природное Место',
+                        background: 'scene_01_a.png',
+                        narrator: 'Вы оказываетесь в каком-то очень комфортном, безопасном и приятном для вас природном месте. Может быть, это какой-то луг, а может быть лес или берег моря или реки. Любой образ подойдет.'
+                    },
+                    {
+                        id: 'scene_01_step_2',
+                        title: 'Природное Место',
+                        background: 'scene_01_a.png',
+                        narrator: 'Оглядитесь по сторонам, поощущайте, как вы себя здесь чувствуете?',
+                        choice: {
+                            question: 'Как вы себя здесь чувствуете?',
+                            options: [
+                                { id: 'A', text: 'Уютно и защищенно.' },
+                                { id: 'B', text: 'Спокойно и умиротворенно.' },
+                                { id: 'C', text: 'Радостно и воодушевленно.' }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                id: 'scene_01b',
+                title: 'Тропинка',
+                steps: [
+                    {
+                        id: 'scene_01b_step_1',
+                        title: 'Тропинка',
+                        background: 'scene_01_b.png',
+                        narrator: 'Обратите внимание, что прямо под вашими ногами есть тропинка! Вы уже стоите на ней. Но это не просто тропинка. Это путь, который ведет вас к очень важному священному для вас месту - ХРАМУ ВАШЕЙ ДУШИ!'
+                    },
+                    {
+                        id: 'scene_01b_step_2',
+                        title: 'Тропинка',
+                        background: 'scene_01_b.png',
+                        narrator: 'Это очень важная встреча, как для вас, так и для самого храма. Вы начинаете двигаться по этой тропинке шаг за шагом.'
+                    }
+                ]
+            },
+            {
+                id: 'scene_02',
+                title: 'Храм Снаружи',
+                steps: [
+                    {
+                        id: 'scene_02_step_1',
+                        title: 'Храм Снаружи',
+                        background: 'scene_02_a.png',
+                        narrator: 'Вы подходите к Храму Души. Это очень красивое и особенное место. Храм выглядит как живое существо - у него есть свои особенности, своя индивидуальность.'
+                    },
+                    {
+                        id: 'scene_02_step_2',
+                        title: 'Храм Снаружи',
+                        background: 'scene_02_a.png',
+                        narrator: 'Вы видите, что у храма есть небольшие недостатки - может быть, где-то растет мох, или есть небольшая трещина. Это показывает, что храм живой, что у него есть своя история.'
+                    },
+                    {
+                        id: 'scene_02_step_3',
+                        title: 'Храм Снаружи',
+                        background: 'scene_02_a.png',
+                        narrator: 'Вы чувствуете, что этот храм - это метафора вашего тела. Он красивый, особенный, но у него есть свои особенности и недостатки.'
+                    }
+                ]
+            },
+            {
+                id: 'scene_02b',
+                title: 'Дверь Храма',
+                steps: [
+                    {
+                        id: 'scene_02b_step_1',
+                        title: 'Дверь Храма',
+                        background: 'scene_02_b.png',
+                        narrator: 'Вы подходите к двери Храма Души. Дверь выглядит очень привлекательно и приглашающе. Вы чувствуете, что за этой дверью вас ждет что-то очень важное.'
+                    },
+                    {
+                        id: 'scene_02b_step_2',
+                        title: 'Дверь Храма',
+                        background: 'scene_02_b.png',
+                        narrator: 'Вы открываете дверь и входите внутрь храма. Внутри вас ждет удивительное путешествие.'
+                    }
+                ]
+            },
+            {
+                id: 'scene_03',
+                title: 'Внутри Храма',
+                steps: [
+                    {
+                        id: 'scene_03_step_1',
+                        title: 'Внутри Храма',
+                        background: 'scene_03_a.png',
+                        character: 'character_02_a.png',
+                        narrator: 'Вы входите внутрь Храма Души. Это очень просторное и светлое место. Внутри храма царит атмосфера покоя и принятия.'
+                    },
+                    {
+                        id: 'scene_03_step_2',
+                        title: 'Внутри Храма',
+                        background: 'scene_03_a.png',
+                        character: 'character_02_a.png',
+                        narrator: 'Вы видите, что в храме есть небольшие недостатки - может быть, трещина в стене или затуманенное окно. Это показывает, что храм живой, что в нем есть жизнь.'
+                    },
+                    {
+                        id: 'scene_03_step_3',
+                        title: 'Внутри Храма',
+                        background: 'scene_03_a.png',
+                        character: 'character_02_a.png',
+                        narrator: 'Вы понимаете, что этот храм - это метафора вашего внутреннего мира. Он красивый и особенный, но у него есть свои особенности и недостатки.'
+                    },
+                    {
+                        id: 'scene_03_step_4',
+                        title: 'Внутри Храма',
+                        background: 'scene_03_a.png',
+                        character: 'character_02_a.png',
+                        narrator: 'Внезапно вы видите, как из ниоткуда появляется ваша Душа. Она выглядит как светящаяся, полупрозрачная женская фигура без лица.'
+                    }
+                ]
+            },
+            {
+                id: 'scene_04',
+                title: 'Исцеление',
+                steps: [
+                    {
+                        id: 'scene_04_step_1',
+                        title: 'Исцеление',
+                        background: 'scene_04_a.png',
+                        character: 'character_02_a.png',
+                        narrator: 'Душа говорит: "Ты давно ждала этой встречи. Я тоже. Чтобы ты уделила мне внимание, подарила свою любовь и помогла исцелить что-то важное. Чтобы нам стало еще лучше, еще комфортнее."'
+                    },
+                    {
+                        id: 'scene_04_step_2',
+                        title: 'Исцеление',
+                        background: 'scene_04_a.png',
+                        character: 'character_02_a.png',
+                        narrator: 'Внезапно в храме начинается исцеление. По стенам течет поток исцеляющего света - золотого, фиолетового или розового. Свет заполняет все трещины и затуманенные места.'
+                    },
+                    {
+                        id: 'scene_04_step_3',
+                        title: 'Исцеление',
+                        background: 'scene_04_a.png',
+                        character: 'character_02_a.png',
+                        narrator: 'Вы чувствуете, как исцеляется ваш внутренний мир. Все недостатки и трещины заполняются светом любви и принятия. Вы становитесь целостными.'
+                    }
+                ]
+            },
+            {
+                id: 'scene_05',
+                title: 'Единство',
+                steps: [
+                    {
+                        id: 'scene_05_step_1',
+                        title: 'Единство',
+                        background: 'scene_05_a.png',
+                        character: 'character_01_a.png',
+                        narrator: 'Вы и ваша Душа становитесь единым целым. Вы чувствуете, как ваше тело и душа сливаются в одно гармоничное существо.'
+                    },
+                    {
+                        id: 'scene_05_step_2',
+                        title: 'Единство',
+                        background: 'scene_05_a.png',
+                        character: 'character_01_a.png',
+                        narrator: 'Вы понимаете, что теперь вы - это не просто тело и душа отдельно, а единое целое. Вы чувствуете себя целостными, гармоничными и счастливыми.'
+                    }
+                ]
+            }
+        ];
+
+        let currentSceneIndex = 0;
+        let currentStepIndex = 0;
+        let choices = {};
+
+        function getCurrentStep() {
+            const currentScene = gameData[currentSceneIndex];
+            return currentScene?.steps[currentStepIndex];
+        }
+
+        function isLastStep() {
+            const currentScene = gameData[currentSceneIndex];
+            return currentStepIndex === (currentScene?.steps.length || 1) - 1;
+        }
+
+        function updateDisplay() {
+            const currentStep = getCurrentStep();
+            if (!currentStep) return;
+
+            // Update background
+            const imagePath = imageData[currentStep.background] || currentStep.background;
+            console.log('Setting background to:', imagePath);
+            backgroundImage.style.backgroundImage = `url(${imagePath})`;
+            backgroundImage.style.backgroundSize = 'cover';
+            backgroundImage.style.backgroundPosition = 'center';
+            
+            // Update title
+            sceneTitle.textContent = currentStep.title;
+            
+            // Update narrator text
+            narratorText.textContent = currentStep.narrator;
+            
+            // Update character
+            if (currentStep.character) {
+                characterContainer.style.display = 'block';
+                const characterPath = imageData[currentStep.character] || currentStep.character;
+                characterImage.src = characterPath;
+                characterImage.alt = 'Character';
+            } else {
+                characterContainer.style.display = 'none';
+            }
+            
+            // Update choices
+            if (currentStep.choice) {
+                choiceQuestion.textContent = currentStep.choice.question;
+                choiceButtons.innerHTML = currentStep.choice.options.map(option => 
+                    `<button class="choice-button" onclick="handleChoice('${option.id}')">${option.text}</button>`
+                ).join('');
+            } else if (isLastStep()) {
+                // Show next scene button
+                choiceQuestion.textContent = 'Продолжить путешествие';
+                choiceButtons.innerHTML = '<button class="choice-button" onclick="nextScene()">Дальше</button>';
+            } else {
+                // Show next step button
+                choiceQuestion.textContent = 'Продолжить';
+                choiceButtons.innerHTML = '<button class="choice-button" onclick="nextStep()">Дальше</button>';
+            }
+        }
+
+        function handleChoice(choiceId) {
+            const currentStep = getCurrentStep();
+            if (currentStep?.choice) {
+                choices[currentStep.id] = choiceId;
+            }
+            nextStep();
+        }
+
+        function nextStep() {
+            if (isLastStep()) {
+                nextScene();
+            } else {
+                currentStepIndex++;
+                updateDisplay();
+            }
+        }
+
+        function nextScene() {
+            if (currentSceneIndex < gameData.length - 1) {
+                currentSceneIndex++;
+                currentStepIndex = 0;
+                updateDisplay();
+            } else {
+                showCompletion();
+            }
+        }
+
+        function showCompletion() {
+            const completionHTML = `
+                <div class="completion-screen">
+                    <h1 class="completion-title">Путешествие Завершено!</h1>
+                    <p class="completion-text">
+                        Поздравляем! Вы успешно прошли через Храм Души и обрели гармонию между телом и душой.
+                    </p>
+                    <div class="choices-summary">
+                        <h3>Ваши выборы:</h3>
+                        ${Object.entries(choices).map(([stepId, choiceId]) => {
+                            const scene = gameData.find(s => s.steps.some(step => step.id === stepId));
+                            const step = scene?.steps.find(s => s.id === stepId);
+                            const choice = step?.choice?.options.find(opt => opt.id === choiceId);
+                            return `<div class="choice-item"><strong>${scene?.title}:</strong> ${choice?.text}</div>`;
+                        }).join('')}
+                    </div>
+                    <button class="restart-button" onclick="restartGame()">Начать заново</button>
+                </div>
+            `;
+            
+            document.querySelector('.game-content').innerHTML = completionHTML;
+        }
+
+        function restartGame() {
+            currentSceneIndex = 0;
+            currentStepIndex = 0;
+            choices = {};
+            
+            // Recreate the game structure
+            document.querySelector('.game-content').innerHTML = `
+                <div class="background-image" id="backgroundImage">
+                    <h1 class="scene-title" id="sceneTitle">Храм Души</h1>
+                    <div class="narrator-section">
+                        <p class="narrator-paragraph" id="narratorText">Добро пожаловать в Храм Души</p>
+                    </div>
+                    <div class="character-container" id="characterContainer" style="display: none;">
+                        <img class="character-image" id="characterImage" alt="Character">
+                    </div>
+                </div>
+                <div class="scene-content" id="sceneContent">
+                    <div class="choice-container">
+                        <div class="choice-question" id="choiceQuestion">Готовы начать ваше духовное путешествие?</div>
+                        <div class="choice-buttons" id="choiceButtons">
+                            <button class="choice-button" onclick="startGame()">Начать путешествие</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Reassign references
+            backgroundImage = document.getElementById('backgroundImage');
+            sceneTitle = document.getElementById('sceneTitle');
+            narratorText = document.getElementById('narratorText');
+            characterContainer = document.getElementById('characterContainer');
+            characterImage = document.getElementById('characterImage');
+            choiceQuestion = document.getElementById('choiceQuestion');
+            choiceButtons = document.getElementById('choiceButtons');
+        }
+
+        function startGame() {
+            currentSceneIndex = 0;
+            currentStepIndex = 0;
+            updateDisplay();
+        }
+
+        // Initialize
+        let backgroundImage = document.getElementById('backgroundImage');
+        let sceneTitle = document.getElementById('sceneTitle');
+        let narratorText = document.getElementById('narratorText');
+        let characterContainer = document.getElementById('characterContainer');
+        let characterImage = document.getElementById('characterImage');
+        let choiceQuestion = document.getElementById('choiceQuestion');
+        let choiceButtons = document.getElementById('choiceButtons');
+    </script>
+</body>
+</html>
