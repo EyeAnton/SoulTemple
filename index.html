@@ -47,15 +47,11 @@
         .background-image {
             width: 100%;
             height: calc(100vh - 200px);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-            text-align: center;
-            padding: 40px;
+            background-color: #f8f9fa;
         }
         
         .scene-title {
@@ -96,6 +92,8 @@
             max-width: 80%;
             margin: 0 auto;
             word-wrap: break-word;
+            z-index: 2;
+            position: relative;
         }
         
         .character-container {
@@ -103,7 +101,7 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 1;
+            z-index: 0;
             pointer-events: none;
         }
         
@@ -366,7 +364,34 @@
     </div>
 
     <script>
-        // Game data with gradient backgrounds instead of images
+        // Load image data from the JSON file
+        let imageData = {};
+        
+        // Try to load the base64 images
+        fetch('./images-base64.json')
+            .then(response => response.json())
+            .then(data => {
+                imageData = data;
+                console.log('✅ Images loaded successfully');
+                console.log('Available images:', Object.keys(imageData));
+            })
+            .catch(error => {
+                console.log('❌ Error loading images:', error);
+                // Fallback to direct image paths
+                imageData = {
+                    'scene_01_a.png': './scene_01_a.png',
+                    'scene_01_b.png': './scene_01_b.png',
+                    'scene_02_a.png': './scene_02_a.png',
+                    'scene_02_b.png': './scene_02_b.png',
+                    'scene_03_a.png': './scene_03_a.png',
+                    'scene_04_a.png': './scene_04_a.png',
+                    'scene_05_a.png': './scene_05_a.png',
+                    'character_01_a.png': './character_01_a.png',
+                    'character_02_a.png': './character_02_a.png'
+                };
+            });
+
+        // Game data with actual image references
         const gameData = [
             {
                 id: 'scene_01',
@@ -375,13 +400,13 @@
                     {
                         id: 'scene_01_step_1',
                         title: 'Природное Место',
-                        background: 'linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%)',
+                        background: 'scene_01_a.png',
                         narrator: 'Вы оказываетесь в каком-то очень комфортном, безопасном и приятном для вас природном месте. Может быть, это какой-то луг, а может быть лес или берег моря или реки. Любой образ подойдет.'
                     },
                     {
                         id: 'scene_01_step_2',
                         title: 'Природное Место',
-                        background: 'linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%)',
+                        background: 'scene_01_a.png',
                         narrator: 'Оглядитесь по сторонам, поощущайте, как вы себя здесь чувствуете?',
                         choice: {
                             question: 'Как вы себя здесь чувствуете?',
@@ -401,13 +426,13 @@
                     {
                         id: 'scene_01b_step_1',
                         title: 'Тропинка',
-                        background: 'linear-gradient(135deg, #2196F3 0%, #03A9F4 100%)',
+                        background: 'scene_01_b.png',
                         narrator: 'Обратите внимание, что прямо под вашими ногами есть тропинка! Вы уже стоите на ней. Но это не просто тропинка. Это путь, который ведет вас к очень важному священному для вас месту - ХРАМУ ВАШЕЙ ДУШИ!'
                     },
                     {
                         id: 'scene_01b_step_2',
                         title: 'Тропинка',
-                        background: 'linear-gradient(135deg, #2196F3 0%, #03A9F4 100%)',
+                        background: 'scene_01_b.png',
                         narrator: 'Это очень важная встреча, как для вас, так и для самого храма. Вы начинаете двигаться по этой тропинке шаг за шагом.'
                     }
                 ]
@@ -419,20 +444,34 @@
                     {
                         id: 'scene_02_step_1',
                         title: 'Храм Снаружи',
-                        background: 'linear-gradient(135deg, #FF9800 0%, #FFC107 100%)',
+                        background: 'scene_02_a.png',
                         narrator: 'Вы подходите к Храму Души. Это очень красивое и особенное место. Храм выглядит как живое существо - у него есть свои особенности, своя индивидуальность.'
                     },
                     {
                         id: 'scene_02_step_2',
                         title: 'Храм Снаружи',
-                        background: 'linear-gradient(135deg, #FF9800 0%, #FFC107 100%)',
+                        background: 'scene_02_a.png',
                         narrator: 'Вы видите, что у храма есть небольшие недостатки - может быть, где-то растет мох, или есть небольшая трещина. Это показывает, что храм живой, что у него есть своя история.'
                     },
                     {
                         id: 'scene_02_step_3',
                         title: 'Храм Снаружи',
-                        background: 'linear-gradient(135deg, #FF9800 0%, #FFC107 100%)',
+                        background: 'scene_02_a.png',
                         narrator: 'Вы чувствуете, что этот храм - это метафора вашего тела. Он красивый, особенный, но у него есть свои особенности и недостатки.'
+                    },
+                    {
+                        id: 'scene_02_step_4',
+                        title: 'Храм Снаружи',
+                        background: 'scene_02_a.png',
+                        narrator: 'Вы понимаете, что этот храм - это отражение вашего внутреннего мира. Каждая деталь имеет значение.',
+                        choice: {
+                            question: 'Что вы чувствуете, глядя на этот храм?',
+                            options: [
+                                { id: 'A', text: 'Гордость за свою уникальность.' },
+                                { id: 'B', text: 'Принятие своих особенностей.' },
+                                { id: 'C', text: 'Любопытство к тому, что внутри.' }
+                            ]
+                        }
                     }
                 ]
             },
@@ -443,13 +482,13 @@
                     {
                         id: 'scene_02b_step_1',
                         title: 'Дверь Храма',
-                        background: 'linear-gradient(135deg, #9C27B0 0%, #E91E63 100%)',
+                        background: 'scene_02_b.png',
                         narrator: 'Вы подходите к двери Храма Души. Дверь выглядит очень привлекательно и приглашающе. Вы чувствуете, что за этой дверью вас ждет что-то очень важное.'
                     },
                     {
                         id: 'scene_02b_step_2',
                         title: 'Дверь Храма',
-                        background: 'linear-gradient(135deg, #9C27B0 0%, #E91E63 100%)',
+                        background: 'scene_02_b.png',
                         narrator: 'Вы открываете дверь и входите внутрь храма. Внутри вас ждет удивительное путешествие.'
                     }
                 ]
@@ -461,30 +500,45 @@
                     {
                         id: 'scene_03_step_1',
                         title: 'Внутри Храма',
-                        background: 'linear-gradient(135deg, #607D8B 0%, #455A64 100%)',
-                        character: '👤',
+                        background: 'scene_03_a.png',
+                        character: 'character_02_a.png',
                         narrator: 'Вы входите внутрь Храма Души. Это очень просторное и светлое место. Внутри храма царит атмосфера покоя и принятия.'
                     },
                     {
                         id: 'scene_03_step_2',
                         title: 'Внутри Храма',
-                        background: 'linear-gradient(135deg, #607D8B 0%, #455A64 100%)',
-                        character: '👤',
+                        background: 'scene_03_a.png',
+                        character: 'character_02_a.png',
                         narrator: 'Вы видите, что в храме есть небольшие недостатки - может быть, трещина в стене или затуманенное окно. Это показывает, что храм живой, что в нем есть жизнь.'
                     },
                     {
                         id: 'scene_03_step_3',
                         title: 'Внутри Храма',
-                        background: 'linear-gradient(135deg, #607D8B 0%, #455A64 100%)',
-                        character: '👤',
+                        background: 'scene_03_a.png',
+                        character: 'character_02_a.png',
                         narrator: 'Вы понимаете, что этот храм - это метафора вашего внутреннего мира. Он красивый и особенный, но у него есть свои особенности и недостатки.'
                     },
                     {
                         id: 'scene_03_step_4',
                         title: 'Внутри Храма',
-                        background: 'linear-gradient(135deg, #607D8B 0%, #455A64 100%)',
-                        character: '👤',
+                        background: 'scene_03_a.png',
+                        character: 'character_02_a.png',
                         narrator: 'Внезапно вы видите, как из ниоткуда появляется ваша Душа. Она выглядит как светящаяся, полупрозрачная женская фигура без лица.'
+                    },
+                    {
+                        id: 'scene_03_step_5',
+                        title: 'Внутри Храма',
+                        background: 'scene_03_a.png',
+                        character: 'character_02_a.png',
+                        narrator: 'Душа приближается к вам. Вы чувствуете ее присутствие как тепло и свет.',
+                        choice: {
+                            question: 'Как вы реагируете на появление вашей Души?',
+                            options: [
+                                { id: 'A', text: 'Приветствую ее с радостью.' },
+                                { id: 'B', text: 'Наблюдаю с любопытством.' },
+                                { id: 'C', text: 'Чувствую трепет и волнение.' }
+                            ]
+                        }
                     }
                 ]
             },
@@ -495,23 +549,38 @@
                     {
                         id: 'scene_04_step_1',
                         title: 'Исцеление',
-                        background: 'linear-gradient(135deg, #00BCD4 0%, #0097A7 100%)',
-                        character: '✨',
+                        background: 'scene_04_a.png',
+                        character: 'character_02_a.png',
                         narrator: 'Душа говорит: "Ты давно ждала этой встречи. Я тоже. Чтобы ты уделила мне внимание, подарила свою любовь и помогла исцелить что-то важное. Чтобы нам стало еще лучше, еще комфортнее."'
                     },
                     {
                         id: 'scene_04_step_2',
                         title: 'Исцеление',
-                        background: 'linear-gradient(135deg, #00BCD4 0%, #0097A7 100%)',
-                        character: '✨',
+                        background: 'scene_04_a.png',
+                        character: 'character_02_a.png',
                         narrator: 'Внезапно в храме начинается исцеление. По стенам течет поток исцеляющего света - золотого, фиолетового или розового. Свет заполняет все трещины и затуманенные места.'
                     },
                     {
                         id: 'scene_04_step_3',
                         title: 'Исцеление',
-                        background: 'linear-gradient(135deg, #00BCD4 0%, #0097A7 100%)',
-                        character: '✨',
+                        background: 'scene_04_a.png',
+                        character: 'character_02_a.png',
                         narrator: 'Вы чувствуете, как исцеляется ваш внутренний мир. Все недостатки и трещины заполняются светом любви и принятия. Вы становитесь целостными.'
+                    },
+                    {
+                        id: 'scene_04_step_4',
+                        title: 'Исцеление',
+                        background: 'scene_04_a.png',
+                        character: 'character_02_a.png',
+                        narrator: 'Процесс исцеления завершается. Вы чувствуете себя обновленными и гармоничными.',
+                        choice: {
+                            question: 'Что вы чувствуете после исцеления?',
+                            options: [
+                                { id: 'A', text: 'Полное принятие себя.' },
+                                { id: 'B', text: 'Глубокий покой и умиротворение.' },
+                                { id: 'C', text: 'Новую силу и энергию.' }
+                            ]
+                        }
                     }
                 ]
             },
@@ -522,16 +591,31 @@
                     {
                         id: 'scene_05_step_1',
                         title: 'Единство',
-                        background: 'linear-gradient(135deg, #795548 0%, #5D4037 100%)',
-                        character: '💫',
+                        background: 'scene_05_a.png',
+                        character: 'character_01_a.png',
                         narrator: 'Вы и ваша Душа становитесь единым целым. Вы чувствуете, как ваше тело и душа сливаются в одно гармоничное существо.'
                     },
                     {
                         id: 'scene_05_step_2',
                         title: 'Единство',
-                        background: 'linear-gradient(135deg, #795548 0%, #5D4037 100%)',
-                        character: '💫',
+                        background: 'scene_05_a.png',
+                        character: 'character_01_a.png',
                         narrator: 'Вы понимаете, что теперь вы - это не просто тело и душа отдельно, а единое целое. Вы чувствуете себя целостными, гармоничными и счастливыми.'
+                    },
+                    {
+                        id: 'scene_05_step_3',
+                        title: 'Единство',
+                        background: 'scene_05_a.png',
+                        character: 'character_01_a.png',
+                        narrator: 'Ваше путешествие подходит к концу. Вы обрели гармонию и целостность.',
+                        choice: {
+                            question: 'Как вы хотите завершить это путешествие?',
+                            options: [
+                                { id: 'A', text: 'С благодарностью за опыт.' },
+                                { id: 'B', text: 'С готовностью к новым открытиям.' },
+                                { id: 'C', text: 'С глубоким пониманием себя.' }
+                            ]
+                        }
                     }
                 ]
             }
@@ -556,8 +640,9 @@
             if (!currentStep) return;
 
             // Update background
-            console.log('Setting background to:', currentStep.background);
-            backgroundImage.style.background = currentStep.background;
+            const imagePath = imageData[currentStep.background] || currentStep.background;
+            console.log('Setting background to:', imagePath);
+            backgroundImage.style.backgroundImage = `url(${imagePath})`;
             backgroundImage.style.backgroundSize = 'cover';
             backgroundImage.style.backgroundPosition = 'center';
             
@@ -570,12 +655,9 @@
             // Update character
             if (currentStep.character) {
                 characterContainer.style.display = 'block';
-                characterImage.src = 'data:image/svg+xml;base64,' + btoa(`
-                    <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.8)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
-                        <text x="50" y="60" text-anchor="middle" font-size="40" fill="#333">${currentStep.character}</text>
-                    </svg>
-                `);
+                const characterPath = imageData[currentStep.character] || currentStep.character;
+                characterImage.src = characterPath;
+                characterImage.alt = 'Character';
             } else {
                 characterContainer.style.display = 'none';
             }
